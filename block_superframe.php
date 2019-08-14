@@ -78,6 +78,8 @@ class block_superframe extends block_base {
         $this->content->footer = '';
         $this->content->text = get_string('welcomeuser', 'block_superframe',
                 $USER);
+        $this->content->text .= '<br /><a href="' . $CFG->wwwroot . '/blocks/superframe/view.php">' .
+            get_string('viewlink', 'block_superframe') . '</a>';
 
         return $this->content;
     }
