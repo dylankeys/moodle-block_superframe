@@ -24,6 +24,7 @@
 require('../../config.php');
 $blockid = required_param('blockid', PARAM_INT);
 $def_config = get_config('block_superframe');
+$context = context_block::instance($blockid, MUST_EXIST);
 $PAGE->set_course($COURSE);
 $PAGE->set_url('/blocks/superframe/view.php');
 $PAGE->set_heading($SITE->fullname);
@@ -31,6 +32,7 @@ $PAGE->set_pagelayout($def_config->pagelayout);
 $PAGE->set_title(get_string('pluginname', 'block_superframe'));
 $PAGE->navbar->add(get_string('pluginname', 'block_superframe'));
 require_login();
+require_capability('block/superframe:seeviewpage',$context);
 
 // Get the instance configuration data from the database.
 // It's stored as a base 64 encoded serialized string.

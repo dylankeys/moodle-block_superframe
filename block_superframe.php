@@ -79,10 +79,16 @@ class block_superframe extends block_base {
         $this->content->text = get_string('welcomeuser', 'block_superframe',
                 $USER);
 
-        // Add the block id to the Moodle URL for the view page.
-        $blockid = $this->instance->id;
-        $url = new moodle_url('/blocks/superframe/view.php', ['blockid' => $blockid]);
-        $this->content->text .= '<p>' . html_writer::link($url, get_string('viewlink', 'block_superframe')) . '</p>';
+        // Check user permission to see the view page.
+        $usercontext = context_user::instance($USER->id);
+
+        if (has_capability('block/superframe:seeviewpage', $usercontext)) {
+            // Add the block id to the Moodle URL for the view page.
+            $blockid = $this->instance->id;
+            $url = new moodle_url('/blocks/superframe/view.php', ['blockid' => $blockid]);
+            $this->content->text .= '<p>' . html_writer::link($url,
+                    get_string('viewlink', 'block_superframe')) . '</p>';
+        }
 
         return $this->content;
     }
