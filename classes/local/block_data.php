@@ -12,24 +12,38 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>;.
 /**
- * Version details
+ * block_superframe main file
  *
  * @package   block_superframe
  * @copyright  Daniel Neis <danielneis@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 /**
  * Modified for use in MoodleBites for Developers Level 1
  * by Richard Jones & Justin Hunt.
- *
- * See: https://www.moodlebites.com/mod/page/view.php?id=24546
  */
+namespace block_superframe\local;
 defined('MOODLE_INTERNAL') || die();
-
-$plugin->version   = 2019082800; // Minimal block
-$plugin->requires  = 2017111300; // Minimum Moodle 3.4.
-$plugin->component = 'block_superframe';
+/**
+ * Class to fetch data from the database
+ *
+ * @package block_superiframe
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @see https://moodle.org/mod/forum/discuss.php?d=330687
+ */
+class block_data {
+    public static function fetch_block_data() {
+        global $DB;
+        $sql = "SELECT b.id, cat.id AS catid, cat.name AS catname,
+                b.blockname, c.shortname
+                FROM {context} x
+                JOIN {block_instances} b ON b.parentcontextid = x.id
+                JOIN {course} c ON c.id = x.instanceid
+                JOIN {course_categories} cat ON cat.id = c.category
+                WHERE x.contextlevel <= :clevel
+                ORDER BY b.blockname DESC";
+        return $DB->get_records_sql($sql, ['clevel' => 80]);
+    }
+}

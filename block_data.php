@@ -12,24 +12,29 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>;.
 /**
- * Version details
+ * block_superframe main file
  *
  * @package   block_superframe
  * @copyright  Daniel Neis <danielneis@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 /**
  * Modified for use in MoodleBites for Developers Level 1
  * by Richard Jones & Justin Hunt.
- *
- * See: https://www.moodlebites.com/mod/page/view.php?id=24546
  */
-defined('MOODLE_INTERNAL') || die();
+use \block_superframe\local\block_data;
 
-$plugin->version   = 2019082800; // Minimal block
-$plugin->requires  = 2017111300; // Minimum Moodle 3.4.
-$plugin->component = 'block_superframe';
+require('../../config.php');
+
+$PAGE->set_url('/blocks/superframe/block_data.php');
+require_login();
+$PAGE->set_course($COURSE);
+$PAGE->set_heading($SITE->fullname);
+$PAGE->set_pagelayout('popup');
+$PAGE->set_title(get_string('pluginname', 'block_superframe'));
+// Let's get some data about blocks.
+$records = block_data::fetch_block_data();
+$renderer = $PAGE->get_renderer('block_superframe');
+echo $renderer->display_block_table($records);

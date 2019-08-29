@@ -23,6 +23,7 @@
  */
 require('../../config.php');
 $blockid = required_param('blockid', PARAM_INT);
+$courseid = required_param('courseid', PARAM_INT);
 $def_config = get_config('block_superframe');
 $context = context_block::instance($blockid, MUST_EXIST);
 $PAGE->set_course($COURSE);
@@ -70,21 +71,6 @@ switch ($config->size) {
         break;
 }
 
-// Start output to browser.
-echo $OUTPUT->header();
-echo $OUTPUT->heading(get_string('pluginname', 'block_superframe'), 5);
-
-$parameters = array('size' => 100);
-echo $OUTPUT->user_picture($USER, $parameters);
-
-echo '<br>' . fullname($USER) . '<br>';
-
-// Build and display an iframe.
-$attributes = ['src' => $url,
-    'width' => $width,
-    'height' => $height];
-echo html_writer::start_tag('iframe', $attributes);
-echo html_writer::end_tag('iframe');
-
-// Send footer out to browser.
-echo $OUTPUT->footer();
+// Send page content to the renderer
+$renderer = $PAGE->get_renderer('block_superframe');
+$renderer->display_view_page($url, $width, $height, $courseid);
